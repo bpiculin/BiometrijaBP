@@ -197,17 +197,17 @@ FAR (False Acceptance Rate) i FRR (False Rejection Rate) pokazuju sigurnost sust
 
 
 ## Izvori
-•	http://bias.csr.unibo.it/fvc2000/download.asp
-•	https://www.neurotechnology.com/download.html#databases
-•	https://www.coep.org.in/resources/coeppalmprintdatabase
-•	https://faces.mpdl.mpg.de/imeji/
-•	Materijali iz kolegija „Primjena biometrijskih tehnologija“, autorice izv.prof.dr.sc. Petre Grd
-•	Fingerprint recognition, autora Jianjiang
-•	https://www.britannica.com
-•	https://www.geeksforgeeks.org/introduction-deep-learning/
-•	https://www.ibm.com/think/topics/deep-learning
-•	https://www.simplilearn.com
-•	https://www.tensorflow.org/api_docs/python/tf/keras/applications/MobileNetV2
-•	https://www.python.org/downloads/release/python-31011/
-•	https://paperswithcode.com/method/mobilenetv2
-•	https://www.tensorflow.org/install
+#### •	http://bias.csr.unibo.it/fvc2000/download.asp
+#### •	https://www.neurotechnology.com/download.html#databases
+#### •	https://www.coep.org.in/resources/coeppalmprintdatabase
+#### •	https://faces.mpdl.mpg.de/imeji/
+#### •	Materijali iz kolegija „Primjena biometrijskih tehnologija“, autorice izv.prof.dr.sc. Petre Grd
+#### •	Fingerprint recognition, autora Jianjiang
+#### •	https://www.britannica.com
+#### •	https://www.geeksforgeeks.org/introduction-deep-learning/
+#### •	https://www.ibm.com/think/topics/deep-learning
+#### •	https://www.simplilearn.com
+#### •	https://www.tensorflow.org/api_docs/python/tf/keras/applications/MobileNetV2
+#### •	https://www.python.org/downloads/release/python-31011/
+#### •	https://paperswithcode.com/method/mobilenetv2
+#### •	https://www.tensorflow.org/install

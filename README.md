@@ -160,7 +160,7 @@ Osoba_76
 Unutar svake datoteka pošto osoba ima 10 prstiju potrebno je rasporediti na 10 datoteka naziva od “Prst_1” do “Prst_10” i unutar njih 8 slika koje su naziva poput 012_1_3 (osoba 12, prst 1, slika 3)
  
  
-Programski kod
+# Programski kod
 Potreban nam je bio jedan od programskih jezika te smo se odabrali za python. 
 Pyhton nam je omogućio razne mogučnosti kao što je upotreba raznih biblioteka i vanjskih resursa koje ćemo razraditi.
 Kod se može pronaći na: https://github.com/bpiculin/BiometrijaBP
@@ -196,7 +196,7 @@ FAR (False Acceptance Rate) i FRR (False Rejection Rate) pokazuju sigurnost sust
  
 
 
-Izvori
+## Izvori
 •	http://bias.csr.unibo.it/fvc2000/download.asp
 •	https://www.neurotechnology.com/download.html#databases
 •	https://www.coep.org.in/resources/coeppalmprintdatabase

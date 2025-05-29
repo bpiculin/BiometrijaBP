@@ -21,57 +21,8 @@ Izv. prof. dr. sc. Petra Grd
 Domagoj Tuličić, mag. inf.
 
 
-
-
-Varaždin, sječanj 2025. 
-Sadržaj
-Contents
-Sadržaj	2
-Uvod	3
-Biometrija	4
-Forenzika	5
-Prikupljanje i analiza uzoraka	5
-Otisci prstiju i dlanova	5
-Karakteristike lica	6
-Biometrijske baze podataka	8
-1.	FVC2004	8
-2.	Neurotechnology Crossmatch	9
-3.	COEP Palmprintdatabase	9
-4.	FACES Database	10
-Analiza metoda strojnog učenja	11
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Uvod
 Biometrija je postala jedan od najvažnijih, ako ne i najvažniji alat za provođenje kriminalističkih istraživanja. Biometrija je oduvijek bila jedan od najboljih načina za identifikaciju ljudi, obzirom da je većina biometrijskih karakteristika unikatna za svaku osobu. Međutim, njezina praktična primjena, pogotovo u kriminalističkom svijetu, raste tek u modernije doba, obzirom na sazrijevanje tehnologije za identifikaciju biometrijskih uzoraka. Taj pomak u tehnologiji je izrazito važan, obzirom da u kriminalistici svaki krivi korak može dovesti do katastrofalne greške koja može imati velik utjecaj na ljudske živote. Zato je jako bitno da se koriste metode koje su dosljedne i točne te da se može osigurati pravilna analiza i prikupljanje uzoraka te pravilno tumačenje rezultata. U ovom projektu ćemo analizirati neke od javno dostupnih baza podataka koje sadrže biometrijske podatke te ćemo obraditi analize metoda strojnog učenja u biometriji i napraviti primjenu jedne od metoda sa ciljem da naučimo i prikažemo koje od ovih metoda i baza imaju najviše prednosti, odnosno mana u korištenju u svrhe kriminalističke istrage.
-
-
-
-
-
 
 
 
@@ -187,3 +138,76 @@ SNN, nekad znan kao i Twin Neural Network je tip strojnog učenja koji radi na p
 #### Hibridi
 
 Hibridni sustavi su vrste sustava koji koriste više različitih metoda strojnog učenja. Česti primjer su sustavi koji koriste CNN i SNN u kombinaciji.U ovom konkretnom primjeru, praksa je da se SNN koristi za prikupljanje više uzoraka i analizu kritičnih područja u uzorku, dok se kritična područja saniraju uz pomoć CNN-a. Na kraju SNN radi sintezu dva uzorka koji su bili obnovljeni. U nekim verzijama se CNN koristi samo na završni izlat SNN-a. Postoje razne mogućnosti, no večinom se se u široj javnosti hibridi ne primjenjuju. Razlog je što se biometrija u široj javnosti koristi za niske potrebe sigurnosti, primjerice na mobilnim uređajima. Za takve potrebe dovoljni su i pojedinačni sistemi, čija je implementacija jeftinija od hibrida. Hibridi se mogu češće vidjeti u područjima gdje je pogrešna autentifikacija ogroman rizik, primjerice u državnim službama.
+
+Odabir baze
+Pri odabiru baza smo koristili github repozitorij:
+https://github.com/robertvazan/fingerprint-datasets?tab=readme-ov-file
+
+Iz njega smo koristio bazu od „Neurotechnology UareU“ koja sadrži 7 različitih osoba te njihovih 10 prstiju te po svakom prstu 8 otisaka, formata TIFF te rezolucije 512 dpi. 
+
+Priprema baze
+Za pripremu baze smo posložili ih u datoteku zvanu “UareU_sample_DBTT”
+te unutar nje više osoba je dobilo svoju datoteku. 
+Podjela glasi:
+Osoba_12 
+Osoba_13
+Osoba_17
+Osoba_22
+Osoba_27
+Osoba_57
+Osoba_76
+ 
+Unutar svake datoteka pošto osoba ima 10 prstiju potrebno je rasporediti na 10 datoteka naziva od “Prst_1” do “Prst_10” i unutar njih 8 slika koje su naziva poput 012_1_3 (osoba 12, prst 1, slika 3)
+ 
+ 
+Programski kod
+Potreban nam je bio jedan od programskih jezika te smo se odabrali za python. 
+Pyhton nam je omogućio razne mogučnosti kao što je upotreba raznih biblioteka i vanjskih resursa koje ćemo razraditi.
+Kod se može pronaći na: https://github.com/bpiculin/BiometrijaBP
+Kao što se može primjetiti u početku koda os i cv2 su korišteni, os nam služi za navigaciju po folderima i radi lakšeg dohvata datoteka iako smo precizno naznačili putanje i nazive.
+Cv2 je biblioteka koja nam omogućuje obradu slika, konverziju boja, skaliranje, čitanje i te funkcije smo I koristili. Pretvaranje u RGB radi korištenja MobileNetV2 I resize-anje na dimenzije koje model može prihavtiti.
+Nuphy je korište za rad s matricama, uz to je bilo potrebno skidanje raznih vanjskih biblioteka tijekom izrade projekta kako bi poboljšali preciznost. 
+Tensorflow.keras, pretrenirani CNN model koji znatno ubrzava I poboljšava treniranje, pošto već zna osnovne vizualne značajke kao što su to linije, rubovi, kontrast.
+Fine-tuning-om smo zamrzli donjih 100 slojeva MobileNeta kako bi zadržali opće naučene značajke dok su Gornji slojevi trenirani na specifičnom datasetu.
+Također smo koristili ImageDataGenerator kako bi izbjegli prenaučenost, learning_rate podešen na 1e-5 nam služi kako nebi uništili njegove slojeve I pritom zadržali predhodno naučene
+Onfusion_matrix i ConfusionMatrixDisplay
+Za analizu točnosti modela i vizualizaciju gdje se točno model najviše griješi (koji prsti se najčešće miješaju).
+To je važno za praktičnu primjenu jer nije dovoljno samo znati točnost već treba razumjeti i koje klase su problematične.
+ 
+
+  
+ 
+
+
+
+
+
+
+U kodu prvo se učitavaju slike otisaka iz foldera,pretvaranjem u RGB format i normalizacijom vrijednosti piksela na raspon od 0 do 1. Oznake (osobe) se kodiraju numerički, a zatim se podaci dijele na trening i test skupove u omjeru 80:20, a ne kao što je prije rečeno 6:2, ali ipak smo vodili računa o proporcionalnoj zastupljenosti svake klase (stratifikacija).
+Kako bi se smanjila mogućnost prenaučenosti, koristi se augmentacija podataka - slike se rotiraju, pomiču i zumiraju nasumično, stvarajući varijacije podataka za treniranje. Zatim se MobileNetV2 učitava bez zadnjeg sloja (top layer) i dio njegovih ranih slojeva se "zamrzava" tj. ne trenira se, jer su oni već dobro naučili prepoznati osnovne vizualne obrasce (rubove, teksture).
+Na MobileNetV2 dodaju se novi slojevi: globalno prosječenje, gusto povezani sloj od 256 neurona sa ReLU aktivacijom i dropout sloj koji sprječava prenaučenost, te na kraju sloj s brojem neurona jednakim broju klasa i softmax aktivacijom za klasifikaciju.
+*MobileNetV2 je neuronska mreža za “računalni vid” odnosno dizajnirana posebno da bude lagana, brza I efikasna iako smo vršili pokretanje na osobnom računalu.
+Model se trenira s malim learning rate-om (1e-5) kako bi se prilagodio postojećim naučenim težinama bez njihova narušavanja. Koristili smo epohe, odnosno iteracije prolaska cijelog treninga kroz skup podataka, 1:n. 
+Nakon 50 epoha treniranja dobivamo rezultate treniranja i FAR,FRR. Točnost na test skupu iznosi oko 79,8%, što znači da model prilično dobro prepoznaje osobe prema otiscima, ali uvijek postoji mjesta za poboljšanje.
+
+ 
+FAR (False Acceptance Rate) i FRR (False Rejection Rate) pokazuju sigurnost sustava: FAR od 20.19% znači da oko 20% lažno prihvaćenih podudaranja, a FRR od 4.81% znači da se oko 5% stvarnih korisnika pogrešno odbija.
+
+ 
+
+
+Izvori
+•	http://bias.csr.unibo.it/fvc2000/download.asp
+•	https://www.neurotechnology.com/download.html#databases
+•	https://www.coep.org.in/resources/coeppalmprintdatabase
+•	https://faces.mpdl.mpg.de/imeji/
+•	Materijali iz kolegija „Primjena biometrijskih tehnologija“, autorice izv.prof.dr.sc. Petre Grd
+•	Fingerprint recognition, autora Jianjiang
+•	https://www.britannica.com
+•	https://www.geeksforgeeks.org/introduction-deep-learning/
+•	https://www.ibm.com/think/topics/deep-learning
+•	https://www.simplilearn.com
+•	https://www.tensorflow.org/api_docs/python/tf/keras/applications/MobileNetV2
+•	https://www.python.org/downloads/release/python-31011/
+•	https://paperswithcode.com/method/mobilenetv2
+•	https://www.tensorflow.org/install
